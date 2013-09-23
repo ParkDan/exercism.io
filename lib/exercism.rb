@@ -1,3 +1,4 @@
+require 'active_record'
 require 'faraday'
 
 require 'exercism/assignment'
@@ -19,11 +20,14 @@ require 'exercism/problem_set'
 require 'exercism/solution'
 require 'exercism/submission'
 require 'exercism/team'
+require 'exercism/team_membership'
 require 'exercism/trail'
 require 'exercism/use_cases'
 require 'exercism/user'
 
-Mongoid.load!("./config/mongoid.yml")
+require 'exercism/manages_database'
+ManagesDatabase.establish_connection
+#Mongoid.load!("./config/mongoid.yml")
 
 class Exercism
   # See lib/exercism/curriculum.rb for default curriculum setup
