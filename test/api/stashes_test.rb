@@ -9,11 +9,8 @@ class StashesApiTest < Minitest::Test
 
   attr_reader :alice
   def setup
+    super
     @alice = User.create(username: 'alice', github_id: 1, current: {'ruby' => 'word-count', 'javascript' => 'anagram'})
-  end
-
-  def teardown
-    Mongoid.reset
   end
 
   def test_api_accepts_stash_submission_and_returns_stash_file
