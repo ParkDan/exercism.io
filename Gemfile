@@ -13,16 +13,20 @@ gem 'rack-flash3', require: 'rack-flash'
 gem 'redcarpet'
 gem 'rouge'
 gem 'sinatra', require: 'sinatra/base'
-gem 'pony'
 gem 'loofah'
 gem 'will_paginate', github: 'mislav/will_paginate', tag: "4cb4986d5ce05aa84572b05cfd1c1d0aa9bc07df"
 gem 'will_paginate-bootstrap'
 gem 'pry', require: false
 gem 'airbrake'
 
+# Must not be required
+# See http://stackoverflow.com/questions/14824179/typeerror-cannot-visit-mailmultibytechars
+gem 'pony', require: false
+
 group :test, :development do
   gem 'ruby-prof'
-  gem 'minitest', require: false
+  gem 'minitest', '~> 5.0', require: false
+  gem 'database_cleaner', require: false
   gem 'approvals', require: false
   gem 'rack-test', require: false
   gem 'mocha', require: false

@@ -125,7 +125,7 @@ DEPENDENCIES
   faraday
   loofah
   mailcatcher
-  minitest
+  minitest (~> 5.0)
   mocha
   newrelic_rpm (= 3.5.8.72)
   petroglyph
