@@ -15,6 +15,7 @@ require 'exercism/guest'
 require 'exercism/locksmith'
 require 'exercism/locale'
 require 'exercism/markdown'
+require 'exercism/muted_submission'
 require 'exercism/notification'
 require 'exercism/null_submission'
 require 'exercism/problem_set'
@@ -29,7 +30,6 @@ require 'exercism/user'
 
 require 'exercism/manages_database'
 ManagesDatabase.establish_connection
-#Mongoid.load!("./config/mongoid.yml")
 
 class Exercism
   # See lib/exercism/curriculum.rb for default curriculum setup
