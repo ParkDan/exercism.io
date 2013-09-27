@@ -2,10 +2,9 @@ class CreateSubmissions < ActiveRecord::Migration
   def change
     create_table :submissions do |t|
       t.integer  :user_id,        null: false
+      t.integer  :exercise_id,    null: false
 
       t.string   :state
-      t.string   :language
-      t.string   :slug
       t.string   :code
       t.datetime :at
       t.datetime :approved_at

@@ -9,6 +9,10 @@ require 'exercism/notification'
 
 class NotificationTest < Minitest::Test
 
+  def setup
+    skip
+  end
+
   def teardown
     super
     @alice = nil

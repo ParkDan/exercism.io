@@ -28,7 +28,7 @@ class CompletionTest < Minitest::Test
 
   def test_unlocked_exercise
     completion = Completion.new(submission, curriculum).save
-    assert_equal Exercise.new('fake', 'two'), completion.unlocked
+    assert_equal create_sample_exercise('fake', 'two'), completion.unlocked
   end
 end
 

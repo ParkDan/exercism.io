@@ -14,12 +14,11 @@ require 'exercism/notification'
 class UserTest < Minitest::Test
 
   def test_identical_users_are_identical
-    attributes = {
-      username: 'alice',
-      current: {'nong' => 'one'},
-    }
+    skip "I don't think we need this any more as users are relational"
+    attributes = { username: 'alice' }
     user1 = User.new(attributes)
     user2 = User.new(attributes)
+
     assert_equal user1, user2
   end
 
@@ -29,21 +28,24 @@ class UserTest < Minitest::Test
   end
 
   def test_user_has_a_problem_set
-    user = User.new(current: {'nong' => 'one'})
-    ex = Exercise.new('nong', 'one')
+    user = User.create
+    ex = create_sample_exercise
+    user.exercises << ex 
     assert_equal [ex], user.current_exercises
   end
 
   def test_user_is_nitpicker_on_completed_assignment
-    user = User.new(current: {'nong' => 'two'}, completed: {'nong' => ['one']})
-    one = Exercise.new('nong', 'one')
-    assert user.nitpicker_on?(one)
+    user = User.create
+    ex = create_sample_exercise('nong', 'one')
+    user.user_exercises.create(exercise: ex, completed: true)
+    assert user.nitpicker_on?(ex)
   end
 
   def test_user_is_not_nitpicker_on_current_assignment
-    user = User.new(current: {'nong' => 'one'})
-    one = Exercise.new('nong', 'one')
-    refute user.nitpicker_on?(one)
+    user = User.create
+    ex = create_sample_exercise('nong', 'one')
+    user.user_exercises.create(exercise: ex, completed: false)
+    refute user.nitpicker_on?(ex)
   end
 
   def test_user_not_a_guest
@@ -123,13 +125,15 @@ class UserTest < Minitest::Test
   end
 
   def test_user_ongoing_without_submission
-    user = User.new(current: {'nong' => 'one'})
+    user = User.create
+    user.exercises << create_sample_exercise
     assert_equal [], user.ongoing
   end
 
   def test_user_ongoing_with_submissions
-    user = User.create(current: {'nong' => 'one'})
-    exercise = Exercise.new('nong', 'one')
+    user = User.create
+    exercise = create_sample_exercise
+    user.exercises << exercise
 
     user.submissions << create_submission(exercise, :code => "s1", state: 'superseded')
     user.submissions << create_submission(exercise, :code => "s2")
@@ -145,13 +149,14 @@ class UserTest < Minitest::Test
   end
 
   def test_user_done_without_submissions
-    user = User.create(current: {'nong' => 'one'})
+    user = User.create
     assert_equal [], user.done
   end
 
   def test_user_done_with_submissions
-    user = User.create(current: {'nong' => 'one'}, completed: {'nong' => ['one']})
-    exercise = Exercise.new('nong', 'one')
+    user = User.create
+    exercise = create_sample_exercise('nong', 'one')
+    user.user_exercises.create(exercise: exercise, completed: true)
 
     user.submissions << create_submission(exercise, :code => "s1")
     user.submissions << create_submission(exercise, :code => "s2")
@@ -162,11 +167,11 @@ class UserTest < Minitest::Test
   end
 
   def test_user_do!
-    user = User.new
-    exercise = Exercise.new('nong', 'one')
+    user = User.create
+    exercise = create_sample_exercise('nong', 'one')
 
     user.do!(exercise)
-    assert_equal({'nong' => 'one'}, user.reload.current)
+    assert_equal([exercise], user.reload.current_exercises)
   end
 
   def test_user_is_not_locksmith_by_default

@@ -19,7 +19,7 @@ class HibernationMessageTest < Minitest::Test
     @submission = FakeSubmission.new(
       'ID',
       FakeUser.new('bob', 'bob@example.com'),
-      Exercise.new('ruby', 'word-count')
+      create_sample_exercise
     )
   end
 

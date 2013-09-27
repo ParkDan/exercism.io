@@ -9,11 +9,12 @@ class TrailTest < Minitest::Test
   attr_reader :trail, :one, :two, :go
 
   def setup
+    skip
     super 
     @go = Locale.new('go', 'go', 'go')
     @trail = Trail.new(go, ['one', 'two'], '/tmp')
-    @one = Exercise.new('go', 'one')
-    @two = Exercise.new('go', 'two')
+    @one = create_sample_exercise('go', 'one')
+    @two = create_sample_exercise('go', 'two')
   end
 
   def test_language

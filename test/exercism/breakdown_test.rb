@@ -2,6 +2,10 @@ require './test/integration_helper'
 
 class BreakdownTest < Minitest::Test
 
+  def setup
+    skip
+  end
+
   def teardown
     super
     @alice = nil
@@ -18,9 +22,9 @@ class BreakdownTest < Minitest::Test
     Submission.create(user: alice, language: 'python', slug: 'bob')
     Submission.create(user: alice, language: 'python', slug: 'word-count')
 
-    bob = Exercise.new('ruby', 'bob')
-    word_count = Exercise.new('ruby', 'word-count')
-    whatever = Exercise.new('ruby', 'whatever')
+    bob = create_sample_exercise('ruby', 'bob')
+    word_count = create_sample_exercise('ruby', 'word-count')
+    whatever = create_sample_exercise('ruby', 'whatever')
 
     breakdown = Breakdown.of('ruby')
     assert_equal 2, breakdown[bob]

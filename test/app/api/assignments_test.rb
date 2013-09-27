@@ -53,7 +53,7 @@ class AssignmentsApiTest < Minitest::Test
       post '/api/v1/user/assignments', {key: bob.key, code: 'THE CODE', path: 'one/code.rb'}.to_json
 
       submission = Submission.first
-      ex = Exercise.new('ruby', 'one')
+      ex = create_sample_exercise('ruby', 'one')
       assert_equal ex, submission.exercise
       assert_equal 201, last_response.status
       assert_equal 'one', bob.reload.current['ruby']
@@ -67,7 +67,7 @@ class AssignmentsApiTest < Minitest::Test
       end
 
       submission = Submission.first
-      ex = Exercise.new('ruby', 'one')
+      ex = create_sample_exercise('ruby', 'one')
       assert_equal ex, submission.exercise
       assert_equal 201, last_response.status
 
@@ -83,7 +83,7 @@ class AssignmentsApiTest < Minitest::Test
       end
 
       submission = Submission.first
-      ex = Exercise.new('go', 'one')
+      ex = create_sample_exercise('go', 'one')
       assert_equal ex, submission.exercise
       assert_equal 201, last_response.status
 

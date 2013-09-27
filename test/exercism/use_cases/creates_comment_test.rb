@@ -3,7 +3,7 @@ require './test/integration_helper'
 class CreatesCommentTest < Minitest::Test
 
   def exercise
-    Exercise.new('nong', 'one')
+    create_sample_exercise('nong', 'one')
   end
 
   def submission

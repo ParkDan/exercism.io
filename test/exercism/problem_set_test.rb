@@ -3,62 +3,52 @@ require 'exercism/exercise'
 require 'exercism/problem_set'
 
 class ProblemSetTest < Minitest::Test
-  class FakeUser
-    include ProblemSet
+  include Minitest::Alice
 
-    def current
-      {'ruby' => 'cake', 'python' => 'eggs', 'go' => 'light'}
-    end
+  #def current
+  #  {'ruby' => 'button', 'python' => 'eggs', 'go' => 'light'}
 
-    def completed
-      {'ruby' => ['shoe', 'lion'], 'python' => ['ham']}
-    end
-  end
-
-  attr_reader :alice
-  def setup
-    super
-    @alice = FakeUser.new
-  end
+  #def completed
+  #  {'ruby' => ['shoe', 'lion'], 'python' => ['ham']}
 
   def test_doing
-    assert alice.doing?('ruby')
-    assert alice.doing?('python')
-    assert alice.doing?('go')
-    refute alice.doing?('clojure')
+    assert alice.doing?(ruby)
+    assert alice.doing?(python)
+    assert alice.doing?(go)
+    refute alice.doing?(clojure)
   end
 
   def test_did
-    assert alice.did?('ruby')
-    assert alice.did?('python')
-    refute alice.did?('go')
+    assert alice.did?(ruby)
+    assert alice.did?(python)
+    refute alice.did?(go)
   end
 
   def test_current_exercises
     ruby, python, go = alice.current_exercises
-    assert_equal Exercise.new('ruby', 'cake'), ruby
-    assert_equal Exercise.new('python', 'eggs'), python
-    assert_equal Exercise.new('go', 'light'), go
+    assert_equal ruby_button, ruby
+    assert_equal python_eggs, python
+    assert_equal go_light, go
   end
 
   def test_completed_exercises
     shoe, lion = alice.completed_exercises['ruby']
     ham = alice.completed_exercises['python'].first
-    assert_equal Exercise.new('ruby', 'shoe'), shoe
-    assert_equal Exercise.new('ruby', 'lion'), lion
-    assert_equal Exercise.new('python', 'ham'), ham
+    assert_equal create_sample_exercise('ruby', 'shoe'), shoe
+    assert_equal create_sample_exercise('ruby', 'lion'), lion
+    assert_equal create_sample_exercise('python', 'ham'), ham
   end
 
   def test_completed_p
-    assert alice.completed?(Exercise.new('ruby', 'shoe')), 'shoe'
-    assert alice.completed?(Exercise.new('ruby', 'lion')), 'lion'
-    refute alice.completed?(Exercise.new('ruby', 'cake')), 'cake'
-    refute alice.completed?(Exercise.new('ruby', 'pill')), 'pill'
+    assert alice.completed?(create_sample_exercise('ruby', 'shoe')), 'shoe'
+    assert alice.completed?(create_sample_exercise('ruby', 'lion')), 'lion'
+    refute alice.completed?(create_sample_exercise('ruby', 'button')), 'button'
+    refute alice.completed?(create_sample_exercise('ruby', 'pill')), 'pill'
   end
 
   def test_working_on_p
-    assert alice.working_on?(Exercise.new('ruby', 'cake')), 'cake'
-    refute alice.working_on?(Exercise.new('ruby', 'shoe')), 'shoe'
+    assert alice.working_on?(create_sample_exercise('ruby', 'button')), 'button'
+    refute alice.working_on?(create_sample_exercise('ruby', 'shoe')), 'shoe'
   end
 
   def test_current_languages
@@ -66,18 +56,17 @@ class ProblemSetTest < Minitest::Test
   end
 
   def test_current_exercise_in_language
-    cake = Exercise.new('ruby', 'cake')
-    assert_equal cake, alice.current_in('ruby')
+    assert_equal ruby_button, alice.current_in(ruby)
   end
 
   def test_latest_in_language
-    ham = Exercise.new('python', 'ham')
-    assert_equal ham, alice.latest_in('python')
+    ham = create_sample_exercise('python', 'ham')
+    assert_equal ham, alice.latest_in(python)
 
-    lion = Exercise.new('ruby', 'lion')
-    assert_equal lion, alice.latest_in('ruby')
+    lion = create_sample_exercise('ruby', 'lion')
+    assert_equal lion, alice.latest_in(ruby)
 
-    assert_nil alice.latest_in('haskell')
+    assert_nil alice.latest_in(haskell)
   end
 end
 

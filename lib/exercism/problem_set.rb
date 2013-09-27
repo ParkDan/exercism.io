@@ -1,32 +1,24 @@
 module ProblemSet
   def doing?(language)
-    current.key?(language)
+    user_exercises.current.joins(:exercise).
+      where("exercises.language_id" => language.id).exists?
   end
 
   def did?(language)
-    completed.key?(language)
+    user_exercises.completed.joins(:exercise).
+      where("exercises.language_id" => language.id).exists?
   end
 
   def current_exercises
-    @current_exercises ||= current.map {|language, slug|
-      Exercise.new(language, slug)
-    }
+    @current_exercises ||= user_exercises.current.map(&:exercise)
   end
 
   def completed_exercises
-    @completed_exercises ||= begin
-      exercises = Hash.new {|history, language| history[language] = []}
-      completed.each do |language, slugs|
-        exercises[language] = slugs.map do |slug|
-          Exercise.new(language, slug)
-        end
-      end
-      exercises
-    end
+    @completed_exercises ||= user_exercises.completed.map(&:exercise)
   end
 
-  def completed?(candidate)
-    completed_exercises.any? {|_, exercises| exercises.include?(candidate)}
+  def completed?(exercise)
+    user_exercises.completed.where(exercise_id: exercise.id).exists?
   end
 
   def working_on?(candidate)
@@ -34,14 +26,22 @@ module ProblemSet
   end
 
   def current_languages
-    current.keys
+    language_ids = user_exercises.current.joins(:exercise).
+      select("DISTINCT(language_id) as language_id").map(&:language_id)
+    Language.where(id: language_ids)
   end
 
   def current_in(language)
-    current_exercises.find {|exercise| exercise.in?(language)}
+    user_exercise = user_exercises.current.joins(:exercise).
+      where('exercises.language_id' => language.id).last
+
+    user_exercise ? user_exercise.exercise : nil
   end
 
   def latest_in(language)
-    completed_exercises[language].last
+    user_exercise = user_exercises.completed.joins(:exercise).
+      where('exercises.language_id' => language.id).last
+
+    user_exercise ? user_exercise.exercise : nil
   end
 end

@@ -21,7 +21,7 @@ class MessageTest < Minitest::Test
   attr_reader :submission, :locksmith
   def setup
     super
-    exercise = Exercise.new('fake', 'one')
+    exercise = create_sample_exercise
     @submission = Submission.on(exercise)
     @submission.user = User.create(
       github_id: 1,

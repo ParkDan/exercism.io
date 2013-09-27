@@ -158,12 +158,12 @@ class AttemptTest < Minitest::Test
 
   def test_attempt_sets_exercise_as_current
     attempt = Attempt.new(user, "\nCODE1\n\nCODE2\n\n\n", 'two/two.fp', curriculum).save
-    assert user.working_on?(Exercise.new('femp', 'two'))
+    assert user.working_on?(create_sample_exercise('femp', 'two'))
   end
 
   def test_attempt_doesnt_set_completed_exercise_as_current
     attempt = Attempt.new(user, "\nCODE1\n\nCODE2\n\n\n", 'one/one.fp', curriculum).save
-    refute user.working_on?(Exercise.new('femp', 'one'))
+    refute user.working_on?(create_sample_exercise('femp', 'one'))
   end
 end
 

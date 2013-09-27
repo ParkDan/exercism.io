@@ -7,7 +7,7 @@ class SeedExerciseTest < Minitest::Test
 
   def test_random_size
     sizes = (1..100).map do
-      Seed::Exercise.new('ruby', 'boat').size
+      Seed::create_sample_exercise('ruby', 'boat').size
     end
     refute_equal 1, sizes.uniq.size
     refute sizes.include?(0)
@@ -16,7 +16,7 @@ class SeedExerciseTest < Minitest::Test
   end
 
   def test_completed_exercise
-    exercise = Seed::Exercise.new('ruby', 'cake', attempts: 3)
+    exercise = Seed::create_sample_exercise('ruby', 'cake', attempts: 3)
 
     attempts = exercise.attempts
     assert_equal 3, attempts.size
@@ -28,7 +28,7 @@ class SeedExerciseTest < Minitest::Test
   end
 
   def test_current_exercise
-    exercise = Seed::Exercise.new('ruby', 'shoe', attempts: 3, done: false)
+    exercise = Seed::create_sample_exercise('ruby', 'shoe', attempts: 3, done: false)
 
     *superseded, pending = exercise.attempts
     superseded.each do |attempt|

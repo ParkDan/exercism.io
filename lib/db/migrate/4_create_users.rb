@@ -13,8 +13,6 @@ class CreateUsers < ActiveRecord::Migration
       t.text     :html_comment
 
       t.string :mastery
-      t.string :current
-      t.string :completed
     end
   end
 end

@@ -10,20 +10,27 @@ class Solution
 
   def exercise
     @exercise ||= begin
-      Exercise.new(language, slug).tap do |exercise|
-        validate exercise
+      begin
+        exercise = Exercise.where(language_id: language.id, exercise_type_id: exercise_type.id).first!
+        validate(exercise)
+        exercise
+      rescue ActiveRecord::RecordNotFound
+        raise Exercism::UnavailableExercise.new("This exercise")
       end
     end
   end
 
   private
 
-  def slug
-    code.slug || user.current_in(language).slug
+  def language
+    @language ||= Language.where(name: code.language).first!
   end
 
-  def language
-    code.language
+  def exercise_type
+    @exercise_type ||= begin
+      slug = code.slug || user.current_in(language).slug
+      ExerciseType.where(slug: slug).first!
+    end
   end
 
   def available?(exercise)
